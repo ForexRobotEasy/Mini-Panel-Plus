@@ -1,0 +1,116 @@
+mql5
+//+------------------------------------------------------------------+
+//|                                Mini Panel Plus                    |
+//|                        Developer: Forex Robot Easy Team           |
+//|                        Website: forexroboteasy.com                |
+//+------------------------------------------------------------------+
+
+// Panel parameters
+input double Lot = 1.0;     // Number of contracts to be traded
+input double Gain = 0.0;    // Stop gain position. Set to 0 to exclude
+input double Loss = 0.0;    // Stop loss position. Set to 0 to exclude
+input double TS = 0.0;      // Trailing stop position
+
+//+------------------------------------------------------------------+
+//|                       Mini Panel Plus Functions                   |
+//+------------------------------------------------------------------+
+
+// Open order
+void OpenOrder(double price)
+{
+   // Place code for opening an order here
+   Print('Order opened at price: ', price);
+}
+
+// Close order
+void CloseOrder()
+{
+   // Place code for closing an order here
+   Print('Order closed');
+}
+
+// Set stop loss
+void SetStopLoss(double price)
+{
+   // Place code for setting stop loss here
+   Print('Stop loss set at price: ', price);
+}
+
+// Set stop gain
+void SetStopGain(double price)
+{
+   // Place code for setting stop gain here
+   Print('Stop gain set at price: ', price);
+}
+
+// Set trailing stop
+void SetTrailingStop(double price)
+{
+   // Place code for setting trailing stop here
+   Print('Trailing stop set at price: ', price);
+}
+
+// Set breakeven
+void SetBreakeven()
+{
+   // Place code for setting breakeven here
+   Print('Breakeven set');
+}
+
+//+------------------------------------------------------------------+
+//|                            Mini Panel Plus                         |
+//+------------------------------------------------------------------+
+
+int OnInit()
+{
+   // Add initialization code here
+   return(INIT_SUCCEEDED);
+}
+
+void OnDeinit(const int reason)
+{
+   // Add deinitialization code here
+}
+
+void OnTick()
+{
+   // Add code to handle tick events here
+   double currentPrice = MarketInfo(Symbol(), MODE_BID);
+   
+   // Check if stop loss is enabled
+   if (Loss != 0.0)
+   {
+      // Check if current price reaches stop loss level
+      if (currentPrice <= Loss)
+      {
+         CloseOrder();
+         return;
+      }
+   }
+   
+   // Check if stop gain is enabled
+   if (Gain != 0.0)
+   {
+      // Check if current price reaches stop gain level
+      if (currentPrice >= Gain)
+      {
+         CloseOrder();
+         return;
+      }
+   }
+   
+   // Check if trailing stop is enabled
+   if (TS != 0.0)
+   {
+      // Check if current price reaches trailing stop level
+      if (currentPrice >= TS)
+      {
+         SetTrailingStop(currentPrice);
+         return;
+      }
+   }
+   
+   // Place code for other trading conditions here
+}
+
+//+------------------------------------------------------------------+
